@@ -1,0 +1,16 @@
+%% 变换马尔科夫链转移矩阵P
+function [P_upward] = transpose_trasition_matrix(P)  % 输入为转移矩阵P，输出为变换后的矩阵P_upward
+
+n_facies = size(P,1);  % 岩性类别数量（即矩阵的行数）
+
+prop = P^100;
+prop = prop(1,:);
+
+P_upward = P';
+P_upward = P_upward.*repmat(prop,n_facies,1);
+P_upward = P_upward./repmat(sum(P_upward,2),1,n_facies);
+
+if sum(sum(isnan(P_upward))) >0
+    P_upward = ones(n_facies,n_facies)/n_facies;
+    %P_upward = P_upward./repmat(sum(P_upward,2),1,n_facies);
+end
